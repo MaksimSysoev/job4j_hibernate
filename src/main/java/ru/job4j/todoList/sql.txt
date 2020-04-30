@@ -7,9 +7,9 @@ CREATE DATABASE db
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 	
-	create table users (
-	id serial primary key,
-	login varchar(1000),
-	password varchar(1000),	
-	create_date date
-);
+   create table item (
+   id serial primary key,
+   descr varchar(1000),
+   created date,
+   done boolean
+   )

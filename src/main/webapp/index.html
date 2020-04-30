@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Создание заданий</title>
+    <meta charset="wondows-1251">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+    <script>
+        function loadItems(flag) {
+            $.ajax( {
+                method: 'get',
+                url:'./list',
+                complete: function(data) {
+                    var items = JSON.parse(data.responseText);
+                    if (items.length>0) {
+                        $('#taskLists').remove();
+                        $("#table").append(" <table class=\'table\' id=\'taskLists\'>")
+                        $("#taskLists").append("<thead>")
+                        $("#taskLists").append("<tr>")
+                        $("#taskLists").append("<th scope=\'col\'>#</th>")
+                        $("#taskLists").append("<th scope=\'col\'>Задание</th>")
+                        $("#taskLists").append("<th scope=\'col\'>Дата создания</th>")
+                        $("#taskLists").append("<th scope=\'col\'>Выполнение</th>")
+                        $("#taskLists").append("</tr>")
+                        $("#taskLists").append("</thead>");
+
+
+                        for (var i=0; i<items.length; i++) {
+                            if (flag!=false) {
+                                if (items[i].done==flag) {
+                                    $("#taskLists").append("<tr>");
+                                    $("#taskLists").append("<td>" + items[i].id + "</td>");
+                                    $("#taskLists").append("<td>" + items[i].descr + "</td>");
+                                    $("#taskLists").append("<td>" + items[i].created + "</td>");
+                                    $("#taskLists").append("<td>" + items[i].done + "</td>");
+                                    $("#taskLists").append("</tr>");
+                                }
+                            } else {
+                                $("#taskLists").append("<tr>");
+                                $("#taskLists").append("<td>" + items[i].id + "</td>");
+                                $("#taskLists").append("<td>" + items[i].descr + "</td>");
+                                $("#taskLists").append("<td>" + items[i].created + "</td>");
+                                $("#taskLists").append("<td>" + items[i].done + "</td>");
+                                $("#taskLists").append("</tr>");
+                            }
+                        }
+                        $("#table").append("</table>");
+                        $("#formTasks").css("display", "block");
+                    } else {
+                        $("#allTasks").remove();
+                        $("#formTasks").css("display", "none");
+                        $("#table").append("<p class='\'h5\' id=\'allTasks\' align=\'center\'>Нет заданий</p>");
+                    }
+
+                }
+            });
+        }
+
+        function createItem() {
+            if ($("#descr").val()!='') {
+                $.ajax({
+                    method: 'post',
+                    url:'./list',
+                    data: {
+                        descr : $("#descr").val(),
+                        done : isDone()
+                    },
+                    complete:loadItems(true)
+                });
+            } else {
+                alert('Введите описание');
+            }
+
+            return false;
+        }
+
+        function isChecked() {
+            if ($("#check").is(":checked")) {
+                loadItems(false);
+            } else {
+                loadItems(true);
+            }
+        }
+
+        function isDone() {
+            if ($("#done").is(":checked")) {
+                done = true;
+            } else {
+                done=false;
+            }
+            return done;
+        }
+
+        $(document).ready(function(){
+            loadItems(true);
+            isDone();
+        });
+
+    </script>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6" style="padding: 15px;">
+            <div class="row">
+                <div class="col">
+                    <p class="h4" align="center">Создание задания:</p>
+                    <form  method="post">
+                        <div class="form-row" style="margin: 15px 0 0 0;">
+                            <div class="col-12">
+                                <label for="descr">Описание задания</label>
+                                <input type="text" class="form-control" id="descr" name="descr">
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="done" onchange="isDone();">
+                                <label class="form-check-label" for="check">Выполнено</label>
+                            </div>
+                        </div>
+                        <input class="btn btn-primary" type="button" onclick="createItem();" style="margin: 15px 0 0 0;" value="Создать задание"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-3"></div>
+    </div>
+
+    <div class="row" style="margin: 30px 0 0 0; "></div>
+
+    <div class="row">
+        <div class="col-1"></div>
+        <div class="col-10" id="allTasks">
+            <form id="formTasks" style="display:none; ">
+                <div class="form-group">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="check" onchange="isChecked();">
+                        <label class="form-check-label" for="check">Показать все задания</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-1"></div>
+    </div>
+
+
+    <div class="row" >
+        <div class="col-1"></div>
+            <div class="col-10" id="table">
+            </div>
+        <div class="col-1"></div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
+</body>
+</html>
