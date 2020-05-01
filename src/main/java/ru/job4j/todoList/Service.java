@@ -2,7 +2,10 @@ package ru.job4j.todoList;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
+
 import java.util.List;
 
 public class Service {
@@ -10,25 +13,38 @@ public class Service {
     private SessionFactory factory = new Configuration()
             .configure()
             .buildSessionFactory();
-    private Session session;
 
     public Service() {
-        this.session = factory.openSession();
+
     }
 
     public void add(Item item) {
-        this.session.save(item);
-        close();
+        final Session session = factory.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            session.save(item);
+            tx.commit();
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
     public List<Item> select() {
-        return this.session.createQuery("from Item").list();
-    }
-
-    public void close() {
-        this.session.getTransaction().commit();
-        this.session.close();
-        this.factory.close();
+        final Session session = factory.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            final Query query = session.createQuery("from Item");
+            tx.commit();
+            return query.list();
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
 }

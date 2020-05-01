@@ -25,10 +25,6 @@ public class TodoList extends HttpServlet {
         mapper.writeValue(writer, items);
         writer.flush();
 
-       // writer.append("{\"descr1\":\"true\", \"desct2\":\"false\"}");
-       // writer.flush();
-       // req.getRequestDispatcher("index.html").forward(req, resp);
-
     }
 
     @Override
@@ -41,7 +37,7 @@ public class TodoList extends HttpServlet {
         item.setCreated(new Timestamp(System.currentTimeMillis()));
         item.setDone(done);
         service.add(item);
-        resp.sendRedirect(String.format("%s/list", req.getContextPath()));
-       // doGet(req, resp);
+     // resp.sendRedirect(String.format("%s/list", req.getContextPath()));
+     //   doGet(req, resp);
     }
 }
