@@ -7,6 +7,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 import java.util.List;
+import java.util.function.Function;
 
 public class Service {
 
@@ -18,12 +19,13 @@ public class Service {
 
     }
 
-    public void add(Item item) {
+    private <T> T tx(final Function<Session, T> command) {
         final Session session = factory.openSession();
         final Transaction tx = session.beginTransaction();
         try {
-            session.save(item);
+            T rsl = command.apply(session);
             tx.commit();
+            return rsl;
         } catch (final Exception e) {
             session.getTransaction().rollback();
             throw e;
@@ -32,19 +34,15 @@ public class Service {
         }
     }
 
+
+    public void add(Item item) {
+        this.tx(session -> session.save(item));
+    }
+
     public List<Item> select() {
-        final Session session = factory.openSession();
-        final Transaction tx = session.beginTransaction();
-        try {
-            final Query query = session.createQuery("from Item");
-            tx.commit();
-            return query.list();
-        } catch (final Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
+      return  this.tx(
+                session->session.createQuery("from Item").list()
+        );
     }
 
 }
