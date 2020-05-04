@@ -1,0 +1,15 @@
+package ru.job4j.carStorage;
+
+public class Driver {
+    private int id;
+
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+}
