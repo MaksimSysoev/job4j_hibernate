@@ -27,7 +27,11 @@
         </property>
 
         <!-- List of XML mapping files -->
-        <mapping resource = "ru.job4j.hibernateRun/User.hbm.xml"/>
+        <mapping resource = "ru/job4j/todoList/Item.hbm.xml"/>
+        <mapping class = "ru.job4j.carStorage.Engine"/>
+        <mapping class = "ru.job4j.carStorage.Car"/>
+        <mapping class = "ru.job4j.carStorage.Driver"/>
+        <mapping class = "ru.job4j.carStorage.HistoryOwner"/>
 
     </session-factory>
 </hibernate-configuration>

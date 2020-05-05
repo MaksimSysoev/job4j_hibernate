@@ -1,13 +1,18 @@
 package ru.job4j.carStorage;
 
-import javax.persistence.CascadeType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
+import com.sun.javafx.geom.transform.Identity;
+import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.omg.CORBA.portable.IDLEntity;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name="engine")
 public class Engine implements Pts{
 
-    @OneToMany(mappedBy = "engine", cascade = CascadeType.ALL)
-    @JoinColumn(name="id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     public Engine() {

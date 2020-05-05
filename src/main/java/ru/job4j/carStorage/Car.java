@@ -4,13 +4,16 @@ import javax.persistence.*;
 
 
 @Entity
+@Table(name="car")
 public class Car implements Pts{
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"), insertable=false, updatable=false )
-    private Engine engine_id;
+    @JoinColumn(name = "engine_id", foreignKey = @ForeignKey(name = "ENGINE_ID_FK"))
+    private Engine engine;
 
     public Car() {
     }
@@ -25,10 +28,10 @@ public class Car implements Pts{
 
 
     public Engine getEngine_id() {
-        return engine_id;
+        return engine;
     }
 
     public void setEngine_id(Engine engine_id) {
-        this.engine_id = engine_id;
+        this.engine = engine_id;
     }
 }
