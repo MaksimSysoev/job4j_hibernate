@@ -4,8 +4,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import ru.job4j.todoList.Item;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.function.Function;
 
@@ -38,9 +38,10 @@ public class Service {
         this.tx(session -> session.save(item));
     }
 
-    public List<Item> select() {
+    public List<Pts> select(String table) {
         return  this.tx(
-                session->session.createQuery("from Item").list()
+                session->session.createQuery("from "+table).list()
         );
     }
+
 }
