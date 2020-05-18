@@ -27,11 +27,13 @@
         </property>
 
         <!-- List of XML mapping files -->
-        <mapping resource = "ru/job4j/todoList/Item.hbm.xml"/>
-       <mapping class = "ru.job4j.carStorage.Engine"/>
-        <mapping class = "ru.job4j.carStorage.Car"/>
-        <mapping class = "ru.job4j.carStorage.Driver"/>
-        <mapping class = "ru.job4j.carStorage.HistoryOwner"/>
+        <mapping class = "ru.job4j.carStorage.Ads"/>
+        <mapping class = "ru.job4j.carStorage.Body"/>
+        <mapping class = "ru.job4j.carStorage.Brand"/>
+        <mapping class = "ru.job4j.carStorage.Model"/>
+        <mapping class = "ru.job4j.carStorage.Photo"/>
+        <mapping class = "ru.job4j.carStorage.User"/>
+
 
     </session-factory>
 </hibernate-configuration>

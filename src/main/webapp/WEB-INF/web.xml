@@ -1,11 +1,51 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <web-app>
     <servlet>
+        <servlet-name>Signin</servlet-name>
+        <servlet-class>ru.job4j.carStorage.SigninController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Signin</servlet-name>
+        <url-pattern>/signin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Lk</servlet-name>
+        <servlet-class>ru.job4j.carStorage.CarStorage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Lk</servlet-name>
+        <url-pattern>/lk</url-pattern>
+    </servlet-mapping>
+
+    <filter>
+        <filter-name>AuthFilter</filter-name>
+        <filter-class>ru.job4j.carStorage.AuthFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>AuthFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+                    <param-name>encoding</param-name>
+                     <param-value>UTF-8</param-value>
+                 </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>EncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--<servlet>
         <servlet-name>TodoList</servlet-name>
         <servlet-class>ru.job4j.todoList.TodoList</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>TodoList</servlet-name>
         <url-pattern>/list</url-pattern>
-    </servlet-mapping>
-s</web-app>
+    </servlet-mapping>-->
+</web-app>
