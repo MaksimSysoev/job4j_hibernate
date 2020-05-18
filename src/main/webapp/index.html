@@ -1,172 +1,150 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
+    <title>Создание объявления</title>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Создание заданий</title>
-    <meta charset="wondows-1251">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+
     <script>
-        function loadItems(flag) {
+       var brands;
+        var ads;
+        function loadData() {
             $.ajax( {
                 method: 'get',
-                url:'./list',
+                url:'./lk',
                 complete: function(data) {
-                    var items = JSON.parse(data.responseText);
-                    if (items.length>0) {
-                        $('#taskLists').remove();
-                        $("#table").append(" <table class=\'table\' id=\'taskLists\'>")
-                        $("#taskLists").append("<thead>")
-                        $("#taskLists").append("<tr>")
-                        $("#taskLists").append("<th scope=\'col\'>#</th>")
-                        $("#taskLists").append("<th scope=\'col\'>Задание</th>")
-                        $("#taskLists").append("<th scope=\'col\'>Дата создания</th>")
-                        $("#taskLists").append("<th scope=\'col\'>Выполнение</th>")
-                        $("#taskLists").append("</tr>")
-                        $("#taskLists").append("</thead>");
+                    brands = JSON.parse(data.responseText);
+                    ads = brands[3];
+                    console.log(JSON.parse(data.responseText));
+                    for (var i = 0; i < brands.length-1; i++) {
+                        $("#brand").append("<option value="+i+" onclick='loadModels(); '>"+brands[i].name+"</option>")
+                    }
 
-
-                        for (var i=0; i<items.length; i++) {
-                            if (flag!=false) {
-                                if (items[i].done==flag) {
-                                    $("#taskLists").append("<tr>");
-                                    $("#taskLists").append("<td>" + items[i].id + "</td>");
-                                    $("#taskLists").append("<td>" + items[i].descr + "</td>");
-                                    $("#taskLists").append("<td>" + items[i].created + "</td>");
-                                    $("#taskLists").append("<td>" + items[i].done + "</td>");
-                                    $("#taskLists").append("</tr>");
-                                }
-                            } else {
-                                $("#taskLists").append("<tr>");
-                                $("#taskLists").append("<td>" + items[i].id + "</td>");
-                                $("#taskLists").append("<td>" + items[i].descr + "</td>");
-                                $("#taskLists").append("<td>" + items[i].created + "</td>");
-                                $("#taskLists").append("<td>" + items[i].done + "</td>");
-                                $("#taskLists").append("</tr>");
-                            }
-                        }
-                        $("#table").append("</table>");
-                        $("#formTasks").css("display", "block");
-                    } else {
-                        $("#allTasks").remove();
-                        $("#formTasks").css("display", "none");
-                        $("#table").append("<p class='\'h5\' id=\'allTasks\' align=\'center\'>Нет заданий</p>");
+                    for (var i = 0; i < ads.length; i++) {
+                        $("#tbody").append("<tr>");
+                            $("#tbody").append("<td>" + i+1 + "</td>");
+                            $("#tbody").append("<td>" + ads[i].name + "</td>");
+                            $("#tbody").append("<td>" + ads[i].brend + " / "+ ads[i].model +"</td>");
+                            $("#tbody").append("<td> фото </td>");
+                            $("#tbody").append("<td>" + ads[i].active + "</td>");
+                            $("#tbody").append("<td>" + ads[i].date + "</td>");
+                        $("#tbody").append("</tr>");
                     }
 
                 }
             });
         }
 
-        function createItem() {
-            if ($("#descr").val()!='') {
-                $.ajax({
-                    method: 'post',
-                    url:'./list',
-                    data: {
-                        descr : $("#descr").val(),
-                        done : isDone()
-                    },
-                    complete:loadItems(true)
-                });
-                loadItems(true);
-            } else {
-                alert('Введите описание');
-            }
-
-            return false;
+        function loadModels() {
+            var id = $("#brand option:selected").val();
+            var model = brands[id].model;
+            $("#model").find('option:not(:first)').remove();
+             for (var i = 0; i < model.length; i++) {
+                 $("#model").append("<option value="+i+"); '>"+model[i].name+"</option>");
+             }
         }
 
-        function isChecked() {
-            if ($("#check").is(":checked")) {
-                loadItems(false);
-            } else {
-                loadItems(true);
-            }
-        }
-
-        function isDone() {
-            if ($("#done").is(":checked")) {
-                done = true;
-            } else {
-                done=false;
-            }
-            return done;
-        }
-
-        $(document).ready(function(){
-            loadItems(true);
-            isDone();
+        $(document).ready(function () {
+            loadData();
         });
-
     </script>
 
 </head>
 <body>
 
-<div class="container">
-    <div class="row">
-        <div class="col-3"></div>
-        <div class="col-6" style="padding: 15px;">
-            <div class="row">
-                <div class="col">
-                    <p class="h4" align="center">Создание задания:</p>
-                    <form  method="post">
-                        <div class="form-row" style="margin: 15px 0 0 0;">
-                            <div class="col-12">
-                                <label for="descr">Описание задания</label>
-                                <input type="text" class="form-control" id="descr" name="descr">
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="done" onchange="isDone();">
-                                <label class="form-check-label" for="check">Выполнено</label>
+    <div class="container">
+        <div class="row" style="height:30px; "></div>
+        <div class="row">
+            <div class="col-12">
+                <p class="h4" align="center">Создание объявления</p>
+            </div>
+        </div>
+        <div class="row" style="height:35px; "></div>
+        <div class="row">
+            <div class="col-12">
+                <form method="post" action="" enctype="multipart/form-data" class="needs-validation" novalidate>
+                    <div class="form-row">
+                        <div class="col-2">
+                            <select class="custom-select" onchange="loadModels();" name="brand" id="brand" required>
+                                <option selected disabled value="">Бренд</option>
+                            </select>
+                        </div>
+                        <div class="col-2">
+                            <select class="custom-select" name="model" id="model" required>
+                                <option selected disabled value="">Модель</option>
+
+                            </select>
+                        </div>
+                        <div class="col-1">
+                            <select class="custom-select" name="body" id="body" required>
+                                <option selected disabled value="">Тип кузова</option>
+                                <option value="0">Седан</option>
+                                <option value="1">Хэтчбек</option>
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <input type="text" name="ads" class="form-control" placeholder="Объявление" required>
+                        </div>
+                        <div class="col-3">
+                            <div class="custom-file">
+                 <input type="file" name="file" class="custom-file-input" accept="image/jpeg" id="customFile">
+                               <label class="custom-file-label" for="customFile">Выбрать изображение</label>
                             </div>
                         </div>
-                        <input class="btn btn-primary" type="button" onclick="createItem();" style="margin: 15px 0 0 0;" value="Создать задание"/>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-3"></div>
-    </div>
-
-    <div class="row" style="margin: 30px 0 0 0; "></div>
-
-    <div class="row">
-        <div class="col-1"></div>
-        <div class="col-10" id="allTasks">
-            <form id="formTasks" style="display:none; ">
-                <div class="form-group">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="check" onchange="isChecked();">
-                        <label class="form-check-label" for="check">Показать все задания</label>
+                        <div class="col-1">
+                            <button class="btn btn-primary" type="submit">Создать</button>
+                        </div>
                     </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-1"></div>
-    </div>
-
-
-    <div class="row" >
-        <div class="col-1"></div>
-            <div class="col-10" id="table">
+                </form>
             </div>
-        <div class="col-1"></div>
+        </div>
+        <div class="dropdown-divider" style="padding: 15px 0 15px 0;"></div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Бренд/модель</th>
+                        <th scope="col">Фото</th>
+                        <th scope="col">Активность</th>
+                        <th scope="col">Дата создания</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-</div>
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
 
 
-</body>
-</html>
 </body>
 </html>
