@@ -5,12 +5,12 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 
 public class Service {
+
     private static Service instance = new Service();
     public static Service getInstance() {
         return instance;
@@ -229,9 +229,24 @@ public class Service {
 
 
 
-    public void add(Pts item) {
-        this.tx(session -> session.save(item));
+    public void add(Pts pts) {
+        this.tx(session -> session.save(pts));
     }
+
+    public void  update(String table, boolean active, int id) {
+    this.tx(
+        session -> session.createSQLQuery("update  "+table+" set active="+active+" where id="+id ).executeUpdate()
+    );
+
+
+    }
+
+    public List<Pts> searchDataById(String table, int id) {
+        return this.tx (
+                session -> session.createSQLQuery("select * from " + table + " where id = "+id ).list()
+        );
+    }
+
 
     public List<Pts> select(String table) {
         return  this.tx(

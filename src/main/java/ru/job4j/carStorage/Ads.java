@@ -99,14 +99,14 @@ public class Ads implements Pts{
     public void setActive(boolean active) {
         this.active = active;
     }
-/*
+
     public Set<Photo> getPhotos() {
         return photos;
     }
+
     public void setPhotos(Set<Photo> photos) {
         this.photos = photos;
     }
-*/
 
 
 

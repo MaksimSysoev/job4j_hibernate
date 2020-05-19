@@ -13,6 +13,8 @@
         var brands;
         var ads;
         function loadData() {
+            $('#tbody').remove();
+            $("#table").append(" <tbody id=\'tbody\'>");
             $.ajax( {
                 method: 'get',
                 url:'./lk',
@@ -21,32 +23,94 @@
                     ads = brands[3];
                     console.log(JSON.parse(data.responseText));
                     for (var i = 0; i < brands.length-1; i++) {
-                        $("#brand").append("<option value="+i+" onclick='loadModels(); '>"+brands[i].name+"</option>")
+                        $("#brand").append("<option value="+brands[i].id+" onclick='loadModels(); '>"+brands[i].name+"</option>");
                     }
 
+                    var num = 1;
                     for (var i = 0; i < ads.length; i++) {
                         $("#tbody").append("<tr>");
-                        $("#tbody").append("<td>" + i+1 + "</td>");
+                        $("#tbody").append("<td>" + num++ + "</td>");
                         $("#tbody").append("<td>" + ads[i].name + "</td>");
                         $("#tbody").append("<td>" + ads[i].brend + " / "+ ads[i].model +"</td>");
                         $("#tbody").append("<td> фото </td>");
-                        $("#tbody").append("<td>" + ads[i].active + "</td>");
+                        if (ads[i].active=="true") {
+                            $("#tbody").append("<td>" +
+                                "<div class=\"custom-control custom-switch\">" +
+                                    "<input type=\"checkbox\" onclick='activeChange("+ads[i].id+"); ' class=\"custom-control-input\" checked id=\"customSwitch"+ads[i].id+"\">" +
+                                    "<label class=\"custom-control-label\" for=\"customSwitch"+ads[i].id+"\">Активно</label>" +
+                                "</div>" +
+                                "</td>");
+                        } else {
+                            $("#tbody").append("<td>" +
+                                "<div class=\"custom-control custom-switch\">" +
+  "<input type=\"checkbox\" onclick='activeChange("+ads[i].id+"); ' class=\"custom-control-input\"  id=\"customSwitch"+ads[i].id+"\">" +
+                                "<label class=\"custom-control-label\" for=\"customSwitch"+ads[i].id+"\">Неактивно</label>" +
+                                "</div>" +
+                                "</td>");
+                        }
+
                         $("#tbody").append("<td>" + ads[i].date + "</td>");
                         $("#tbody").append("</tr>");
                     }
 
                 }
             });
+            $("#table").append(" </tbody>");
+        }
+
+        function activeChange(id) {
+            var active;
+            if ($("#customSwitch"+id+"").is(':checked')) {
+                $("label[for='customSwitch"+id+"']").text("Активно");
+                active = true;
+            } else {
+                $("label[for='customSwitch"+id+"']").text("Неактивно");
+                active = false;
+            }
+
+            $.ajax ({
+                method:'post',
+                url:'./lk',
+                data: {
+                    id: id,
+                    active: active
+                },
+                complete: function () {
+
+                }
+            })
+
         }
 
         function loadModels() {
-            var id = $("#brand option:selected").val();
+            var id = $("#brand option:selected").val()-1;
             var model = brands[id].model;
             $("#model").find('option:not(:first)').remove();
+
             for (var i = 0; i < model.length; i++) {
-                $("#model").append("<option value="+i+"); '>"+model[i].name+"</option>");
+                $("#model").append("<option value="+model[i].id+">"+model[i].name+"</option>");
+
             }
         }
+
+
+        function createAds() {
+            $.ajax({
+                method: 'post',
+                url:'./lk',
+                enctype: 'multipart/form-data',
+                data: {
+                    brand: $("#brand").val(),
+                    model: $("#model").val(),
+                    body: $("#body").val(),
+                    ads: $("#ads").val(),
+                    file: $("#file").val()
+                },
+                complete: loadData()
+            });
+        }
+
+
 
         $(document).ready(function () {
             loadData();
@@ -66,7 +130,7 @@
     <div class="row" style="height:35px; "></div>
     <div class="row">
         <div class="col-12">
-            <form method="post" action="" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <form  method="post" enctype="multipart/form-data" action="">
                 <div class="form-row">
                     <div class="col-2">
                         <select class="custom-select" onchange="loadModels();" name="brand" id="brand" required>
@@ -82,21 +146,21 @@
                     <div class="col-1">
                         <select class="custom-select" name="body" id="body" required>
                             <option selected disabled value="">Тип кузова</option>
-                            <option value="0">Седан</option>
-                            <option value="1">Хэтчбек</option>
+                            <option value="1">Седан</option>
+                            <option value="2">Хэтчбек</option>
                         </select>
                     </div>
                     <div class="col-3">
-                        <input type="text" name="ads" class="form-control" placeholder="Объявление" required>
+                        <input type="text" name="ads" id = "ads" class="form-control" placeholder="Объявление" required>
                     </div>
                     <div class="col-3">
                         <div class="custom-file">
-                            <input type="file" name="file" class="custom-file-input" accept="image/jpeg" id="customFile">
-                            <label class="custom-file-label" for="customFile">Выбрать изображение</label>
+                            <input type="file" name="file" id="file"  accept="image/jpeg">
+
                         </div>
                     </div>
                     <div class="col-1">
-                        <button class="btn btn-primary" type="submit">Создать</button>
+                        <button class="btn btn-primary" type="button" onclick="createAds(); ">Создать</button>
                     </div>
                 </div>
             </form>
@@ -105,7 +169,7 @@
     <div class="dropdown-divider" style="padding: 15px 0 15px 0;"></div>
     <div class="row">
         <div class="col-12">
-            <table class="table">
+            <table class="table" id="table">
                 <thead>
                 <tr>
                     <th scope="col">#</th>

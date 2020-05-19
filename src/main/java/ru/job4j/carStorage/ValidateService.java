@@ -2,7 +2,9 @@ package ru.job4j.carStorage;
 
 import java.util.List;
 
-public class ValidateService {
+
+public final class ValidateService {
+
 
     private static ValidateService instance = null;
 
@@ -29,6 +31,14 @@ public class ValidateService {
 
     public void add(Pts pts) {
         service.add(pts);
+    }
+
+    public void  update(String table, boolean active, int id) {
+        service.update(table, active, id);
+    }
+
+    public List<Pts> searchDataById(String table, int id) {
+        return service.searchDataById(table, id);
     }
 
 }
