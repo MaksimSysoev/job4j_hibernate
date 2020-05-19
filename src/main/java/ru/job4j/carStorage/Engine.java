@@ -6,6 +6,7 @@ import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.omg.CORBA.portable.IDLEntity;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -40,5 +41,39 @@ public class Engine implements Pts{
 
     public void setEngines(Set<Engine> engines) {
         this.engines = engines;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public Brand getBrand() {
+        return null;
+    }
+
+    @Override
+    public Model getModel() {
+        return null;
+    }
+
+    @Override
+    public Body getBody() {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Engine engine = (Engine) o;
+        return id == engine.id &&
+                Objects.equals(engines, engine.engines);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, engines);
     }
 }

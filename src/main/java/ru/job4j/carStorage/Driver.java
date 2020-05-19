@@ -2,6 +2,7 @@ package ru.job4j.carStorage;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -37,5 +38,39 @@ public class Driver implements Pts{
 
     public void setCars(Set<Car> cars) {
         this.cars = cars;
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public Brand getBrand() {
+        return null;
+    }
+
+    @Override
+    public Model getModel() {
+        return null;
+    }
+
+    @Override
+    public Body getBody() {
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Driver driver = (Driver) o;
+        return id == driver.id &&
+                Objects.equals(cars, driver.cars);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, cars);
     }
 }
