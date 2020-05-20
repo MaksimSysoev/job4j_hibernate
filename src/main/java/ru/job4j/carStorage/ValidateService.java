@@ -33,12 +33,9 @@ public final class ValidateService {
         service.add(pts);
     }
 
-    public void  update(String table, boolean active, int id) {
-        service.update(table, active, id);
-    }
 
-    public List<Pts> searchDataById(String table, int id) {
-        return service.searchDataById(table, id);
+    public void update(Pts pts) {
+        service.update(pts);
     }
 
 }

@@ -136,11 +136,19 @@ public class CarStorage  extends HttpServlet {
         if (req.getParameter("active")!=null) {
             Boolean active = Boolean.parseBoolean(req.getParameter("active"));
             int id = Integer.parseInt(req.getParameter("id"));
-            List<Pts> list = logic.searchDataById("Ads", id);
-            Ads ads = new Ads();
-            ads.setId(id);
-            ads.setActive(active);
-            logic.update("Ads", active, id);
+            List<Pts> list = logic.select("Ads");
+
+            for (int i = 0; i < list.size(); i++) {
+                if (id == list.get(i).getId()) {
+                    Ads ads = (Ads) list.get(i);
+                    ads.setActive(active);
+                    ads.setCreated(new Date());
+                    logic.update(ads);
+                    break;
+                }
+            }
+
+
         }
 
         doGet(req, resp);

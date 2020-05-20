@@ -233,19 +233,21 @@ public class Service {
         this.tx(session -> session.save(pts));
     }
 
-    public void  update(String table, boolean active, int id) {
-    this.tx(
-        session -> session.createSQLQuery("update  "+table+" set active="+active+" where id="+id ).executeUpdate()
-    );
 
-
+    public void update(Pts pts) {
+        final Session session = factory.openSession();
+        final Transaction tx = session.beginTransaction();
+        try {
+            session.update(pts);
+            tx.commit();
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 
-    public List<Pts> searchDataById(String table, int id) {
-        return this.tx (
-                session -> session.createSQLQuery("select * from " + table + " where id = "+id ).list()
-        );
-    }
 
 
     public List<Pts> select(String table) {
