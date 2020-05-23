@@ -1,13 +1,19 @@
 package ru.job4j.carStorage;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SigninController extends HttpServlet {
+
     private final ValidateService logic = ValidateService.getInstance();
 
     @Override

@@ -13,6 +13,7 @@ public class AuthFilter implements Filter {
 
     }
 
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
@@ -30,7 +31,6 @@ public class AuthFilter implements Filter {
             chain.doFilter(req, resp);
         }
     }
-
     @Override
     public void destroy() {
 
