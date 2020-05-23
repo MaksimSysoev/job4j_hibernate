@@ -15,6 +15,12 @@ public class CarStorageTest {
 
     private ru.job4j.carStorage.Service service = new Service();
 
+    @Test
+    public void whenGetIdUser() {
+        int id = service.select("User").get(0).getId();
+        assertThat(id, is(1));
+    }
+
 /*
     @Before
     public void setUp() {
