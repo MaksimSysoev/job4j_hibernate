@@ -18,15 +18,6 @@
         <url-pattern>/lk</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>Account</servlet-name>
-        <servlet-class>ru.job4j.carStorage.Account</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>Account</servlet-name>
-        <url-pattern>/account</url-pattern>
-    </servlet-mapping>
-
     <filter>
         <filter-name>AuthFilter</filter-name>
         <filter-class>ru.job4j.carStorage.AuthFilter</filter-class>
