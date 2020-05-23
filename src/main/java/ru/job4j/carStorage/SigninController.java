@@ -1,7 +1,5 @@
 package ru.job4j.carStorage;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

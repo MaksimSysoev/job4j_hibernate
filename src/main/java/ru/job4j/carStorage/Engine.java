@@ -1,10 +1,5 @@
 package ru.job4j.carStorage;
 
-
-import com.sun.javafx.geom.transform.Identity;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
-import org.omg.CORBA.portable.IDLEntity;
-
 import javax.persistence.*;
 import java.util.Objects;
 import java.util.Set;

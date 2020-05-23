@@ -1,7 +1,5 @@
 package ru.job4j.todoList;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,11 +17,11 @@ public class TodoList extends HttpServlet {
         resp.setContentType("text/json");
         resp.setCharacterEncoding("windows-1251");
 
-        List<Item> items = service.select();
+      /*  List<Item> items = service.select();
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(writer, items);
-        writer.flush();
+        writer.flush();*/
 
     }
 
