@@ -5,24 +5,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.List;
 
-public class TodoList extends HttpServlet {
+public class TodoList {
+    /*
     private Service service = new Service();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/json");
         resp.setCharacterEncoding("windows-1251");
-
-      /*  List<Item> items = service.select();
-        PrintWriter writer = new PrintWriter(resp.getOutputStream());
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(writer, items);
-        writer.flush();*/
-
     }
 
     @Override
@@ -38,4 +30,5 @@ public class TodoList extends HttpServlet {
      // resp.sendRedirect(String.format("%s/list", req.getContextPath()));
      //   doGet(req, resp);
     }
+    */
 }
