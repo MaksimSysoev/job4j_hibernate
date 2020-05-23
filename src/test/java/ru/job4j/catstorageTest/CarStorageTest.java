@@ -18,7 +18,7 @@ public class CarStorageTest {
     @Test
     public void whenGetIdUser() {
         int id = service.select("User").get(0).getId();
-        assertThat(id, is(1));
+        assertThat(id, is(1 ));
     }
 
 /*
