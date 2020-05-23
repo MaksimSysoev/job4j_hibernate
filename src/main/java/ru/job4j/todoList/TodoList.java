@@ -7,8 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-public class TodoList {
-    /*
+public class TodoList extends HttpServlet {
+
     private Service service = new Service();
 
     @Override
@@ -30,5 +30,5 @@ public class TodoList {
      // resp.sendRedirect(String.format("%s/list", req.getContextPath()));
      //   doGet(req, resp);
     }
-    */
+
 }
