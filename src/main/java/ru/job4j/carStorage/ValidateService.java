@@ -29,6 +29,10 @@ public final class ValidateService {
         return service.select(table);
     }
 
+    public List<Pts> selectWithCondition(String table, String param, String value) {
+        return service.selectWithCondition(table, param, value);
+    }
+
     public void add(Pts pts) {
         service.add(pts);
     }

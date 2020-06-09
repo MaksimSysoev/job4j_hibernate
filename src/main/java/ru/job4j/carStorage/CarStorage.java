@@ -12,8 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 public class CarStorage  extends HttpServlet {
 
@@ -37,40 +40,42 @@ public class CarStorage  extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/json");
         resp.setCharacterEncoding("windows-1251");
+        List<Pts> listBrands = logic.select("Brand");
 
-        List<Pts> brands = logic.select("Brand");
-        // Получение списка брендов и моделей
-        String str="";
+        // Получение списка брендов
+        String strBrands="";
         int count = 0;
-        for (int i = 0; i < brands.size(); i++) {
-            Brand brand = (Brand) brands.get(i);
+        for (int i = 0; i < listBrands.size(); i++) {
+            Brand brand = (Brand) listBrands.get(i);
             String sub = getModels(brand);
 
-            if (count!=brands.size()-1) {
-                str = str + "{\"id\":\""+brands.get(i).getId()+"\", \"name\":\""+brands.get(i).getName()+"\", \"model\":["+sub+"]},";
+            if (count!=listBrands.size()-1) {
+                strBrands = strBrands + "{\"id\":\""+brand.getId()+"\", \"name\":\""+brand.getName()+"\", \"model\":["+sub+"]},";
             } else {
-                str = str + "{\"id\":\""+brands.get(i).getId()+"\", \"name\":\""+brands.get(i).getName()+"\", \"model\":["+sub+"]}";
+                strBrands = strBrands + "{\"id\":\""+brand.getId()+"\", \"name\":\""+brand.getName()+"\", \"model\":["+sub+"]}";
             }
             count++;
         }
 
 
-        // Получение всех объявлений
+        // Получение списка объявлений
         List<Pts> listAds = logic.select("Ads");
-        String s = "";
+        String strAds = "";
         count= 0;
         for (int i = 0; i < listAds.size(); i++) {
             Ads ads = (Ads) listAds.get(i);
+            String img = ads.getPhotos().iterator().next().getName();
+
             if  (count!=listAds.size()-1)  {
-                s = s + "{\"id\":\""+ads.getId()+"\", \"name\":\""+ads.getName()+"\", \"brend\":\""+ads.getBrand().getName()+"\", \"model\":\""+ads.getModel().getName()+"\",  \"date\":\""+ads.getCreated()+"\", \"active\":\""+ads.isActive()+"\"}, ";
+                strAds = strAds + "{\"id\":\""+ads.getId()+"\", \"name\":\""+ads.getName()+"\", \"brend\":\""+ads.getBrand().getName()+"\", \"model\":\""+ads.getModel().getName()+"\", \"img\":\""+img+"\",  \"date\":\""+ads.getCreated()+"\", \"active\":\""+ads.isActive()+"\", \"brandid\":\""+ads.getBrand().getId()+"\"}, ";
             } else {
-                s = s + "{\"id\":\""+ads.getId()+"\", \"name\":\""+ads.getName()+"\", \"brend\":\""+ads.getBrand().getName()+"\", \"model\":\""+ads.getModel().getName()+"\",  \"date\":\""+ads.getCreated()+"\", \"active\":\""+ads.isActive()+"\"} ";
+                strAds = strAds + "{\"id\":\""+ads.getId()+"\", \"name\":\""+ads.getName()+"\", \"brend\":\""+ads.getBrand().getName()+"\", \"model\":\""+ads.getModel().getName()+"\", \"img\":\""+img+"\",  \"date\":\""+ads.getCreated()+"\", \"active\":\""+ads.isActive()+"\", \"brandid\":\""+ads.getBrand().getId()+"\"}";
             }
             count++;
         }
 
-        String st="[" + s + "]";
-        String js = "["+str+", "+st+"]";
+        strAds = "[" + strAds + "]";
+        String js = "["+strBrands+", "+strAds+" ]";
         PrintWriter writer = new PrintWriter(resp.getOutputStream());
         writer.append(js);
         writer.flush();
@@ -82,8 +87,7 @@ public class CarStorage  extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/json");
-
-       if (req.getParameter("brand")!=null & req.getParameter("model")!=null & req.getParameter("body")!=null & req.getParameter("ads")!=null) {
+       if (req.getParameter("brand")!=null & req.getParameter("model")!=null & req.getParameter ("body")!=null & req.getParameter("ads")!=null) {
 
            int brand_id = Integer.parseInt(req.getParameter("brand"));
            int model_id = Integer.parseInt(req.getParameter("model"));
@@ -105,10 +109,15 @@ public class CarStorage  extends HttpServlet {
             logic.add(ads);
 
             Photo photo = new Photo();
-            photo.setName(img);
+            if (!img.isEmpty()) {
+                photo.setName(img);
+            } else {
+                photo.setName("no-photo");
+            }
             photo.setAds(new Ads(ads.getId()));
             logic.add(photo);
 
+            /*
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletContext servletContext = this.getServletConfig().getServletContext();
             File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
@@ -131,6 +140,7 @@ public class CarStorage  extends HttpServlet {
             } catch (FileUploadException e) {
                 e.printStackTrace();
             }
+            */
         }
 
         if (req.getParameter("active")!=null) {
@@ -147,8 +157,6 @@ public class CarStorage  extends HttpServlet {
                     break;
                 }
             }
-
-
         }
 
         doGet(req, resp);

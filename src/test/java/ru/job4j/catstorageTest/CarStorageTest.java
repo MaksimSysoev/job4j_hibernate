@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.job4j.carStorage.*;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -18,7 +20,19 @@ public class CarStorageTest {
     @Test
     public void whenGetIdUser() {
         int id = service.select("User").get(0).getId();
-        assertThat(id, is(1 ));
+        assertThat(id, is(1));
+    }
+
+    @Test
+    public void whenSortByBrandThenGetListAds() {
+        List<Pts> lst = service.selectWithCondition("Ads", "brand_id", "1");
+        assertThat(lst.size(), is(1));
+    }
+
+    @Test
+    public void whenSortByPhotoThenGetListAds() {
+        List<Pts> lst = service.selectWithCondition("Photo", "ads_id", "1");
+        assertThat(lst.size(), is(2));
     }
 
 /*

@@ -123,22 +123,22 @@ public class Service {
 
         if (select("Photo").isEmpty()) {
             Photo photo = new Photo();
-            photo.setName("photo1");
+            photo.setName("photo1.jpg");
             photo.setAds(new Ads(1));
             add(photo);
-            photo.setName("photo2");
+            photo.setName("photo2.jpg");
             photo.setAds(new Ads(1));
             add(photo);
-            photo.setName("photo3");
+            photo.setName("photo3.jpg");
             photo.setAds(new Ads(2));
             add(photo);
-            photo.setName("photo4");
+            photo.setName("photo4.jpg");
             photo.setAds(new Ads(3));
             add(photo);
-            photo.setName("photo5");
+            photo.setName("photo5.jpg");
             photo.setAds(new Ads(4));
             add(photo);
-            photo.setName("photo6");
+            photo.setName("photo6.jpg");
             photo.setAds(new Ads(4));
             add(photo);
             photo.setName("photo7");
@@ -253,6 +253,12 @@ public class Service {
     public List<Pts> select(String table) {
         return  this.tx(
                 session->session.createQuery("from "+table).list()
+        );
+    }
+
+    public List<Pts> selectWithCondition(String table, String param, String value) {
+    return this.tx(
+            session -> session.createQuery("from " + table + " where "+param+"='"+value+"'").list()
         );
     }
 
